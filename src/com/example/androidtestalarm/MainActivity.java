@@ -1,11 +1,13 @@
 package com.example.androidtestalarm;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -30,7 +32,7 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				System.out.println("등록 클릭!!!");
+				regAlarm();
 			}
 		});
 
@@ -38,7 +40,7 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				System.out.println("취소 클릭!!!!");
+				cancelAlarm();
 			}
 		});
 	}
@@ -47,11 +49,30 @@ public class MainActivity extends Activity {
 		timepicker_alarmtime = (TimePicker) findViewById(R.id.timePicker1);
 	}
 
-	private void chkCurrentTime() {
+	private int[] chkPickerHour() {
+		int picHour = timepicker_alarmtime.getCurrentHour();
+		int minute = timepicker_alarmtime.getCurrentMinute();
+
+		int[] currentPicTime = { picHour, minute };
+
+		return currentPicTime;
+	}
+
+	private void regAlarm() {
+		Toast.makeText(MainActivity.this, "알람 등록", Toast.LENGTH_SHORT).show();
+		int[] picTime = chkPickerHour();
+		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+		AlarmManage al = new AlarmManage();
+		al.setAlarms(am, MainActivity.this, picTime);
 
 	}
 
-	private void chkPicTime() {
+	private void cancelAlarm() {
+		Toast.makeText(MainActivity.this, "알람 취소", Toast.LENGTH_SHORT).show();
+		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
 
+		AlarmManage al = new AlarmManage();
+		al.emptyAlarms(am, MainActivity.this);
 	}
 }
